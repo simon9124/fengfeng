@@ -1,0 +1,16 @@
+@import '~iview/src/styles/index.less';
+
+@menu-dark-title: #001529;
+@menu-dark-active-bg: #000c17;
+@layout-sider-background: #001529;
+
+// 展开的菜单后，hover未点击的菜单
+.ivu-layout /deep/ {
+  .left-sider {
+    .ivu-menu-opened {
+      .ivu-menu-item:not(.ivu-menu-item-active):hover {
+        background: #363e4f !important;
+      }
+    }
+  }
+}
