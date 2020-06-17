@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import { routes, otherRouter, mainRouter } from "./routers";
+import { routes, constantRouter, mainRouter } from "./routers";
 import store from "@/store";
 import iView from "iview";
 import { setToken, getToken, canTurnTo, setTitle } from "@/libs/util";
@@ -20,21 +20,35 @@ const LOGIN_PAGE_NAME = "login"; // 登录页
 const whiteList = []; // 白名单
 
 const turnTo = (to, access, next) => {
-  if (canTurnTo(to.name, access, routes)) {
-    // 有权限，可访问
-    next();
+  if (to.path === "/") {
+    // 已经登录的用户新打开 "/"" -> 跳回该用户登录后的首页
+    if (JSON.stringify(access).indexOf("visitor") > -1) {
+      // 车间主管 -> 直接进入驾驶舱-车间
+      next({
+        name: "geology"
+      });
+    } else {
+      next({
+        name: homeName
+      });
+    }
   } else {
-    // 无权限，重定向到401页面
-    next({
-      replace: true,
-      name: "error_401"
-    });
+    if (canTurnTo(to.name, access, routes)) {
+      // 有权限，可访问
+      next();
+    } else {
+      // 无权限，重定向到401页面
+      next({
+        replace: true,
+        name: "error_401"
+      });
+    }
   }
 };
 
 // 方法：初始化路由表刷新
 export const refreshRoute = () => {
-  const routes = [...otherRouter, ...mainRouter];
+  const routes = [...constantRouter, ...mainRouter];
   router.matcher = new Router({ routes }).matcher;
 };
 
