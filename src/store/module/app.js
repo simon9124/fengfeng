@@ -136,7 +136,7 @@ export default {
       });
     },
     // 动态路由数据 -> 首次登录挂载路由
-    updateMenuList({ commit, rootState }, routes) {
+    addRouterData({ commit, rootState }, routes) {
       // 筛选：去除顶部菜单
       var addRoutes = routes.filter(route => {
         return route.meta.parentId !== "rootMenu";
@@ -172,7 +172,7 @@ export default {
                   var routerData = routerDataHanding(res.data.data); // 拿到路由接口数据
                   localSave("dynamicRouter", JSON.stringify(routerData)); // 存储routerData到localStorage
                   gotRouter = filterAsyncRouter(routerData); // 过滤路由,路由组件转换
-                  dispatch("updateMenuList", gotRouter).then(res => {
+                  dispatch("addRouterData", gotRouter).then(res => {
                     resolve(routerData);
                   });
                 })
@@ -213,7 +213,7 @@ export default {
                 return menu.meta.parentId === "rootMenu";
               })[0].meta.id
             ); // 过滤路由 - 存储顶部菜单选中第一项到localStorage
-            dispatch("updateMenuList", gotRouter).then(res => {
+            dispatch("addRouterData", gotRouter).then(res => {
               resolve(routerData);
             });
           }
